@@ -12,10 +12,12 @@ export const getConfigPaths = (configDirectory) => {
       const fileContent = fs.readFileSync(configFilePath, 'utf-8');
       const dbCredentials = fileContent.match(/url:\s*process\.env\.(\w+)!/)[1];
 
+      console.log(process.env[dbCredentials]);
+
       if (!process.env[dbCredentials]) {
         console.log('Missing dbCredentials.url for ', configFilePath);
         console.log('Please check the database URL is correct and defined as an environment variable.');
-        process.exit(1);
+        // process.exit(1);
       }
 
       if (process.env[dbCredentials] && fs.statSync(directoryPath).isDirectory() && fs.existsSync(configFilePath)) {

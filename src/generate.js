@@ -10,8 +10,8 @@ try {
 
   configPaths.forEach((configPath) => {
     try {
-      console.log(`Running generate for ${configPath}`);
-      execSync(`drizzle-kit generate --config=${configPath}`, { encoding: 'utf-8' });
+      // console.log(`Running generate for ${configPath}`);
+      // execSync(`drizzle-kit generate --config=${configPath}`, { encoding: 'utf-8' });
     } catch (error) {
       console.error(`Error generating with config ${configPath}:`, error);
     }

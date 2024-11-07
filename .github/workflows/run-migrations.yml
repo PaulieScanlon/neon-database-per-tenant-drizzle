@@ -11,20 +11,25 @@ jobs:
   run-migrations:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      # Step to convert all secrets to .env variables
-      - name: Export GitHub secrets to .env file
+      - name: Set up GitHub CLI
         run: |
-          for secret in $(echo "${!GITHUB_ENV}" | tr ',' '\n'); do
-            echo "$secret=${{ secrets[secret] }}" >> .env
+          sudo apt-get install -y jq
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Export all secrets dynamically to .env file
+        run: |
+          echo "NODE_ENV=production" > .env
+          gh secret list --repo $GITHUB_REPOSITORY | awk '{print $1}' | while read secret_name; do
+            secret_value=$(gh secret get $secret_name --repo $GITHUB_REPOSITORY)
+            echo "${secret_name}=${secret_value}" >> .env
+            echo "${secret_name}=${secret_value}" >> $GITHUB_ENV  # Dynamically adding to workflow environment
           done
 
       - name: Install dependencies
@@ -33,5 +38,4 @@ jobs:
       - name: Run generate
         env:
           NODE_ENV: production
-        run: |
-          node -r dotenv/config src/generate.ts
+        run: node -r dotenv/config src/generate.ts

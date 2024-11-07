@@ -10,12 +10,6 @@ on:
 jobs:
   run-migrations:
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true # Ensure the PR was merged
-
-    env: # Set all secrets as environment variables
-      NODE_ENV: production
-      # Automatically inject all secrets with `secrets.*` syntax
-      ${GITHUB_ENV}: ${{ toJSON(secrets) }}
 
     steps:
       - name: Checkout repository
@@ -26,8 +20,18 @@ jobs:
         with:
           node-version: '20'
 
+      # Step to convert all secrets to .env variables
+      - name: Export GitHub secrets to .env file
+        run: |
+          for secret in $(echo "${!GITHUB_ENV}" | tr ',' '\n'); do
+            echo "$secret=${{ secrets[secret] }}" >> .env
+          done
+
       - name: Install dependencies
         run: npm install
 
       - name: Run generate
-        run: npm run generate
+        env:
+          NODE_ENV: production
+        run: |
+          node -r dotenv/config src/generate.ts

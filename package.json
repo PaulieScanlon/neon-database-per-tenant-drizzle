@@ -6,12 +6,14 @@
   "type": "module",
   "scripts": {
     "generate": "node src/generate",
+    "migrate": "node src/migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.3",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.28.0",
     "drizzle-orm": "^0.36.1"

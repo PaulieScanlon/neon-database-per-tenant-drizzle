@@ -1,15 +1,16 @@
 name: Migrate changes
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  # pull_request:
+  #   types: [closed]
+  #   branches:
+  #     - main
+  workflow_dispatch:
 
 jobs:
   pr-merged:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true # Ensure the PR was merged
+    # if: github.event.pull_request.merged == true # Ensure the PR was merged
 
     steps:
       - name: Checkout repository

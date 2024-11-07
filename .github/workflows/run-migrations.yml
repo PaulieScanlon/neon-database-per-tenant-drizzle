@@ -8,9 +8,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  pr-merged:
+  run-migrations:
     runs-on: ubuntu-latest
     # if: github.event.pull_request.merged == true # Ensure the PR was merged
+
+    env: # Set all secrets as environment variables
+      NODE_ENV: production
+      # Automatically inject all secrets with `secrets.*` syntax
+      ${GITHUB_ENV}: ${{ toJSON(secrets) }}
 
     steps:
       - name: Checkout repository

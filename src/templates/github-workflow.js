@@ -1,4 +1,4 @@
-name: Migrate changes
+export const githubWorkflow = (secrets) => `name: Migrate changes
 
 on:
   # pull_request:
@@ -8,10 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  CUSTOMER_1: ${{ secrets.CUSTOMER_1 }}
-  CUSTOMER_2: ${{ secrets.CUSTOMER_2 }}
-  CUSTOMER_3: ${{ secrets.CUSTOMER_3 }}
-  CUSTOMER_4: ${{ secrets.CUSTOMER_4 }}
+${secrets.map((line) => `  ${line}: \${{ secrets.${line} }}`).join('\n')}
 
 jobs:
   migrate:
@@ -30,3 +27,4 @@ jobs:
 
       - name: Run migration script
         run: node src/scripts/migrate.js
+`;

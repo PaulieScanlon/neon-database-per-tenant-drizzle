@@ -1,11 +1,13 @@
-import 'dotenv/config';
+export const drizzleConfig = (directory, envKey) => `
+  import 'dotenv/config';
   import { defineConfig } from 'drizzle-kit';
   
   export default defineConfig({
-    out: './drizzle/customer-2',
+    out: './drizzle/${directory}',
     schema: './src/db/schema.ts',
     dialect: 'postgresql',
     dbCredentials: {
-      url: process.env.CUSTOMER_2!,
+      url: process.env.${envKey}!,
     },
   });
+`;

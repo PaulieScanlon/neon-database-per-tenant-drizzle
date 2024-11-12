@@ -1,10 +1,10 @@
 export const githubWorkflow = (secrets) => `name: Migrate changes
 
 on:
-  # pull_request:
-  #   types: [closed]
-  #   branches:
-  #     - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
   workflow_dispatch:
 
 env:

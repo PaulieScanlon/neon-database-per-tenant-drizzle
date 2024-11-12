@@ -8,6 +8,13 @@
       "when": 1731395317784,
       "tag": "0000_boring_electro",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1731396490301,
+      "tag": "0001_exotic_xorn",
+      "breakpoints": true
     }
   ]
 }

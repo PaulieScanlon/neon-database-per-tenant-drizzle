@@ -51,10 +51,10 @@ const octokit = new Octokit({ auth: process.env.OCTOKIT_PERSONAL_ACCESS_TOKEN })
         },
       });
       console.log('Secret set successfully:', envKey);
-
-      execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
-      console.log('Run drizzle-kit generate successfully:', path);
     }
+
+    execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
+    console.log('Run drizzle-kit generate successfully:', path);
 
     const secrets = envVariables.map((item) => item.split('=')[0]);
 

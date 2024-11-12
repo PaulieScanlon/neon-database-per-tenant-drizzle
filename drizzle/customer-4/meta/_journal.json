@@ -15,6 +15,13 @@
       "when": 1731396490301,
       "tag": "0001_exotic_xorn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731396704453,
+      "tag": "0002_huge_stature",
+      "breakpoints": true
     }
   ]
 }

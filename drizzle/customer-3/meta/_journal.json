@@ -15,6 +15,13 @@
       "when": 1731396489969,
       "tag": "0001_legal_queen_noir",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731396704139,
+      "tag": "0002_overconfident_thunderball",
+      "breakpoints": true
     }
   ]
 }

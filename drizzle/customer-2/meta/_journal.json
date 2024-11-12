@@ -15,6 +15,13 @@
       "when": 1731396489655,
       "tag": "0001_wild_magma",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731396703781,
+      "tag": "0002_brainy_pretty_boy",
+      "breakpoints": true
     }
   ]
 }

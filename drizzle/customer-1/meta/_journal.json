@@ -15,6 +15,13 @@
       "when": 1731396489344,
       "tag": "0001_freezing_madelyne_pryor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731396703459,
+      "tag": "0002_clumsy_war_machine",
+      "breakpoints": true
     }
   ]
 }

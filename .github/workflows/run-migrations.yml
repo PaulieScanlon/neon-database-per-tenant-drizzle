@@ -12,6 +12,7 @@ env:
   CUSTOMER_2: ${{ secrets.CUSTOMER_2 }}
   CUSTOMER_3: ${{ secrets.CUSTOMER_3 }}
   CUSTOMER_4: ${{ secrets.CUSTOMER_4 }}
+  CUSTOMER_5: ${{ secrets.CUSTOMER_5 }}
 
 jobs:
   migrate:

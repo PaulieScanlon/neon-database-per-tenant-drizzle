@@ -17,7 +17,7 @@ import { fileURLToPath } from 'url';
 
     configPaths.forEach((configPath) => {
       console.log(`Running drizzle-kit for: ${configPath}`);
-      execSync(`drizzle-kit migrate --config=${configPath}`, { encoding: 'utf-8' });
+      execSync(`npx drizzle-kit migrate --config=${configPath}`, { encoding: 'utf-8' });
     });
   } else {
     console.log('The configs directory does not exist.');

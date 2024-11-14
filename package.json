@@ -13,6 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@neondatabase/api-client": "^1.10.3",
     "@neondatabase/serverless": "^0.10.3",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.28.0",

@@ -1,5 +1,6 @@
-import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
+import { createApiClient } from '@neondatabase/api-client';
 import { Octokit } from 'octokit';
 import 'dotenv/config';
 
@@ -8,14 +9,15 @@ import { drizzleConfig } from '../templates/drizzle-config.js';
 import { githubWorkflow } from '../templates/github-workflow.js';
 
 const octokit = new Octokit({ auth: process.env.OCTOKIT_PERSONAL_ACCESS_TOKEN });
+const neonApi = createApiClient({
+  apiKey: process.env.NEON_API_KEY,
+});
+let secrets = [];
 
 (async () => {
   if (!existsSync('configs')) {
     mkdirSync('configs');
   }
-
-  const envContent = readFileSync('.env.config', 'utf8');
-  const envVariables = envContent.split('\n').filter((line) => line.trim() !== '');
 
   const { data: publicKeyData } = await octokit.request(
     'GET /repos/PaulieScanlon/neon-database-per-tenant-drizzle/actions/secrets/public-key',
@@ -26,47 +28,74 @@ const octokit = new Octokit({ auth: process.env.OCTOKIT_PERSONAL_ACCESS_TOKEN })
     }
   );
 
-  for (const line of envVariables) {
-    const [envKey, envValue] = line.split('=');
-    const directory = envKey.toLowerCase().replace(/_/g, '-');
-    const path = `configs/${directory}`;
-    const file = 'drizzle.config.ts';
+  const response = await neonApi.listProjects({ org_id: 'org-yellow-base-45781345' });
 
-    if (!existsSync(path)) {
-      mkdirSync(path);
+  const {
+    data: { projects },
+  } = await response;
 
-      writeFileSync(`${path}/${file}`, drizzleConfig(directory, envKey).trim());
-      console.log('drizzle.config created successfully:', path);
+  await Promise.all(
+    projects
+      .filter((project) => project.name !== 'paulie.dev')
+      .map(async (project) => {
+        const { id, name } = project;
 
-      const encryptedValue = await encryptSecret(publicKeyData.key, envValue);
+        const response = await neonApi.getConnectionUri({
+          projectId: id,
+          database_name: 'neondb',
+          role_name: 'neondb_owner',
+        });
 
-      await octokit.request(`PUT /repos/PaulieScanlon/neon-database-per-tenant-drizzle/actions/secrets/${envKey}`, {
-        owner: 'PaulieScanlon',
-        repo: 'neon-database-per-tenant-drizzle',
-        secret_name: envKey,
-        encrypted_value: encryptedValue,
-        key_id: publicKeyData.key_id,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28',
-        },
-      });
-      console.log('Secret set successfully:', envKey);
-    }
+        const {
+          data: { uri },
+        } = await response;
 
-    execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
-    console.log('Run drizzle-kit generate successfully:', path);
+        const safeName = name.replace(/\s+/g, '-').toLowerCase();
+        const path = `configs/${safeName}`;
+        const file = 'drizzle.config.ts';
+        const envVarName = `${safeName.replace(/-/g, '_').toUpperCase()}_DATABASE_URL`;
+        const encryptedValue = await encryptSecret(publicKeyData.key, uri);
 
-    const secrets = envVariables.map((item) => item.split('=')[0]);
+        secrets.push(envVarName);
 
-    const workflow = githubWorkflow(secrets);
+        if (!existsSync(path)) {
+          mkdirSync(path);
 
-    if (!existsSync('.github')) {
-      mkdirSync('.github');
-    }
-    if (!existsSync('.github/workflows')) {
-      mkdirSync('.github/workflows');
-    }
+          writeFileSync(`${path}/${file}`, drizzleConfig(safeName, envVarName));
+          console.log('Create drizzle.config for:', safeName);
 
-    writeFileSync(`.github/workflows/run-migrations.yml`, workflow);
+          execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
+          console.log('Run drizzle-kit generate for :', safeName);
+
+          await octokit.request(
+            `PUT /repos/PaulieScanlon/neon-database-per-tenant-drizzle/actions/secrets/${envVarName}`,
+            {
+              owner: 'PaulieScanlon',
+              repo: 'neon-database-per-tenant-drizzle',
+              secret_name: envVarName,
+              encrypted_value: encryptedValue,
+              key_id: publicKeyData.key_id,
+              headers: {
+                'X-GitHub-Api-Version': '2022-11-28',
+              },
+            }
+          );
+          console.log('Set secret for :', safeName);
+        } else {
+          console.log('-- No new databases --');
+        }
+      })
+  );
+
+  const workflow = githubWorkflow(secrets);
+
+  if (!existsSync('.github')) {
+    mkdirSync('.github');
   }
+  if (!existsSync('.github/workflows')) {
+    mkdirSync('.github/workflows');
+  }
+
+  writeFileSync(`.github/workflows/run-migrations.yml`, workflow);
+  console.log('Finished');
 })();

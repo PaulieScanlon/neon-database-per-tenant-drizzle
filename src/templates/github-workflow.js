@@ -8,11 +8,13 @@ on:
   workflow_dispatch:
 
 env:
-${secrets.map((line) => `  ${line}: \${{ secrets.${line} }}`).join('\n')}
+${secrets.map((envVarName) => `  ${envVarName}: \${{ secrets.${envVarName} }}`).join('\n')}
 
 jobs:
   migrate:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

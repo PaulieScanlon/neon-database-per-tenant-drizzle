@@ -1,13 +1,13 @@
-export const drizzleConfig = (name, envVar) => `
+export const drizzleConfig = (safeName, envVarName) => `
   import 'dotenv/config';
   import { defineConfig } from 'drizzle-kit';
   
   export default defineConfig({
-    out: './drizzle/${name}',
+    out: './drizzle/${safeName}',
     schema: './src/db/schema.ts',
     dialect: 'postgresql',
     dbCredentials: {
-      url: process.env.${envVar}!,
+      url: process.env.${envVarName}!,
     },
   });
 `;

@@ -12,6 +12,9 @@ const octokit = new Octokit({ auth: process.env.OCTOKIT_PERSONAL_ACCESS_TOKEN })
 const neonApi = createApiClient({
   apiKey: process.env.NEON_API_KEY,
 });
+
+const repoOwner = 'PaulieScanlon';
+const repoName = 'neon-database-per-tenant-drizzle';
 let secrets = [];
 
 (async () => {
@@ -36,7 +39,7 @@ let secrets = [];
 
   await Promise.all(
     projects
-      .filter((project) => project.name !== 'paulie.dev')
+      .filter((project) => project.name !== 'paulie.dev') // TODO remove this
       .map(async (project) => {
         const { id, name } = project;
 
@@ -67,19 +70,16 @@ let secrets = [];
           execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
           console.log('Run drizzle-kit generate for :', safeName);
 
-          await octokit.request(
-            `PUT /repos/PaulieScanlon/neon-database-per-tenant-drizzle/actions/secrets/${envVarName}`,
-            {
-              owner: 'PaulieScanlon',
-              repo: 'neon-database-per-tenant-drizzle',
-              secret_name: envVarName,
-              encrypted_value: encryptedValue,
-              key_id: publicKeyData.key_id,
-              headers: {
-                'X-GitHub-Api-Version': '2022-11-28',
-              },
-            }
-          );
+          await octokit.request(`PUT /repos/${repoOwner}/${repoName}/actions/secrets/${envVarName}`, {
+            owner: repoOwner,
+            repo: repoName,
+            secret_name: envVarName,
+            encrypted_value: encryptedValue,
+            key_id: publicKeyData.key_id,
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28',
+            },
+          });
           console.log('Set secret for :', safeName);
         } else {
           console.log('-- No new databases --');

@@ -15,6 +15,13 @@
       "when": 1731655199377,
       "tag": "0001_silent_sentinels",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731655275253,
+      "tag": "0002_secret_harry_osborn",
+      "breakpoints": true
     }
   ]
 }

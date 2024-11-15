@@ -31,7 +31,8 @@ let secrets = [];
     }
   );
 
-  const response = await neonApi.listProjects({ org_id: 'org-yellow-base-45781345' });
+  const response = await neonApi.listProjects();
+  // const response = await neonApi.listProjects({ org_id: '' });
 
   const {
     data: { projects },

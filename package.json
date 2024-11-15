@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "create": "node src/scripts/create",
     "generate": "node src/scripts/generate",
     "migrate": "node src/scripts/migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,6 +16,7 @@
   "dependencies": {
     "@neondatabase/api-client": "^1.10.3",
     "@neondatabase/serverless": "^0.10.3",
+    "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.28.0",
     "drizzle-orm": "^0.36.1",

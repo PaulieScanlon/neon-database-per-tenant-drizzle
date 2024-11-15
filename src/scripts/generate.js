@@ -8,7 +8,7 @@ import { encryptSecret } from '../utils/encrypt-secret.js';
 import { drizzleConfig } from '../templates/drizzle-config.js';
 import { githubWorkflow } from '../templates/github-workflow.js';
 
-const octokit = new Octokit({ auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN });
+const octokit = new Octokit({ auth: process.env.PERSONAL_ACCESS_TOKEN });
 const neonApi = createApiClient({
   apiKey: process.env.NEON_API_KEY,
 });

@@ -1,4 +1,4 @@
-export const githubWorkflow = (secrets) => `name: Migrate changes
+name: Migrate changes
 
 on:
   pull_request:
@@ -7,16 +7,17 @@ on:
       - main
 
 env:
-${secrets
-  .sort((a, b) => a.localeCompare(b))
-  .map((envVarName) => `  ${envVarName}: \${{ secrets.${envVarName} }}`)
-  .join('\n')}
+  ACME_CORP_DATABASE_URL: ${{ secrets.ACME_CORP_DATABASE_URL }}
+  CARLOTA_NEW_DATABASE_URL: ${{ secrets.CARLOTA_NEW_DATABASE_URL }}
+  FINANCE_CO_DATABASE_URL: ${{ secrets.FINANCE_CO_DATABASE_URL }}
+  PAYROLL_INC_DATABASE_URL: ${{ secrets.PAYROLL_INC_DATABASE_URL }}
+  TALENT_BIZ_DATABASE_URL: ${{ secrets.TALENT_BIZ_DATABASE_URL }}
 
 jobs:
   migrate:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,4 +32,3 @@ jobs:
 
       - name: Run migration script
         run: node src/scripts/migrate.js
-`;

@@ -1,8 +1,6 @@
 # neon-database-per-tenant-drizzle
 
-<!-- https://github.com/prisma/prisma/issues/2443#issuecomment-630679118 -->
-<!-- https://www.prisma.io/docs/orm/prisma-schema/data-model/multi-schema -->
-<!-- https://www.answeroverflow.com/m/1115698958094827560 -->
+The steps outlined below have been covered in more detail on the Neon blog: [post title tbd](https://neon.tech/blog)
 
 ## Create a new Neon Database
 
@@ -14,8 +12,30 @@ npm run create -- --name="ACME Corp"
 
 ## Generate migrations
 
-Creates DrizzleORM config, migrations directories, updates GitHub Repository secrets with Neon connection strings and updates GitHub Actions workoolw file.
+Creates DrizzleORM config, migrations directories, updates GitHub Repository secrets with Neon connection strings and updates GitHub Actions workflow file.
 
 ```
 npm run generate
+```
+
+## Run migrations
+
+Migrations are run from a GitHub Action when a PR is closed and merged is true.
+
+```
+name: Migrate changes
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+env:
+  ACME_CORP_DATABASE_URL: ${{ secrets.ACME_CORP_DATABASE_URL }}
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
 ```

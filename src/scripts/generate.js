@@ -87,8 +87,6 @@ let secrets = [];
     })
   );
 
-  const workflow = githubWorkflow(secrets);
-
   if (!existsSync('.github')) {
     mkdirSync('.github');
   }
@@ -96,6 +94,7 @@ let secrets = [];
     mkdirSync('.github/workflows');
   }
 
+  const workflow = githubWorkflow(secrets);
   writeFileSync(`.github/workflows/run-migrations.yml`, workflow);
   console.log('Finished');
 })();

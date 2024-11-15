@@ -8,7 +8,10 @@ on:
   workflow_dispatch:
 
 env:
-${secrets.map((envVarName) => `  ${envVarName}: \${{ secrets.${envVarName} }}`).join('\n')}
+${secrets
+  .sort((a, b) => a.localeCompare(b))
+  .map((envVarName) => `  ${envVarName}: \${{ secrets.${envVarName} }}`)
+  .join('\n')}
 
 jobs:
   migrate:

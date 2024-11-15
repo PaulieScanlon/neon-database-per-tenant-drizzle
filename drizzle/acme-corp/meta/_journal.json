@@ -15,6 +15,13 @@
       "when": 1731652616940,
       "tag": "0001_ordinary_arachne",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731652868605,
+      "tag": "0002_neat_cable",
+      "breakpoints": true
     }
   ]
 }

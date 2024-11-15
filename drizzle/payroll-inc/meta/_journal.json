@@ -8,6 +8,13 @@
       "when": 1731655086581,
       "tag": "0000_flowery_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1731655199707,
+      "tag": "0001_charming_baron_strucker",
+      "breakpoints": true
     }
   ]
 }

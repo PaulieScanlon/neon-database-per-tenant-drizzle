@@ -8,6 +8,13 @@
       "when": 1731655085642,
       "tag": "0000_third_gauntlet",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1731655199377,
+      "tag": "0001_silent_sentinels",
+      "breakpoints": true
     }
   ]
 }

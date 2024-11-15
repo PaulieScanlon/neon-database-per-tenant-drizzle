@@ -8,6 +8,13 @@
       "when": 1731651579542,
       "tag": "0000_same_veda",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1731652617704,
+      "tag": "0001_nappy_tarot",
+      "breakpoints": true
     }
   ]
 }

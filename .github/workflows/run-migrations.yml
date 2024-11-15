@@ -9,15 +9,15 @@ on:
 
 env:
   TALENT_BIZ_DATABASE_URL: ${{ secrets.TALENT_BIZ_DATABASE_URL }}
-  PAYROLL_INC_DATABASE_URL: ${{ secrets.PAYROLL_INC_DATABASE_URL }}
   ACME_CORP_DATABASE_URL: ${{ secrets.ACME_CORP_DATABASE_URL }}
   FINANCE_CO_DATABASE_URL: ${{ secrets.FINANCE_CO_DATABASE_URL }}
+  PAYROLL_INC_DATABASE_URL: ${{ secrets.PAYROLL_INC_DATABASE_URL }}
 
 jobs:
   migrate:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

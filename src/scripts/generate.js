@@ -64,13 +64,15 @@ let secrets = [];
 
         if (!existsSync(path)) {
           mkdirSync(path);
+          console.log('Set secret for :', safeName);
+        }
 
+        if (!existsSync(`${path}/${file}`)) {
           writeFileSync(`${path}/${file}`, drizzleConfig(safeName, envVarName));
           console.log('Create drizzle.config for:', safeName);
+        }
 
-          execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
-          console.log('Run drizzle-kit generate for :', safeName);
-
+        if (!existsSync(path) || !existsSync(`${path}/${file}`)) {
           await octokit.request(`PUT /repos/${repoOwner}/${repoName}/actions/secrets/${envVarName}`, {
             owner: repoOwner,
             repo: repoName,
@@ -81,10 +83,10 @@ let secrets = [];
               'X-GitHub-Api-Version': '2022-11-28',
             },
           });
-          console.log('Set secret for :', safeName);
-        } else {
-          console.log('-- No new databases --');
         }
+
+        execSync(`drizzle-kit generate --config=${path}/${file}`, { encoding: 'utf-8' });
+        console.log('Run drizzle-kit generate for :', safeName);
       })
   );
 

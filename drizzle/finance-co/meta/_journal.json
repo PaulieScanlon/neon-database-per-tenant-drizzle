@@ -15,6 +15,13 @@
       "when": 1731652617266,
       "tag": "0001_mighty_solo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731652868275,
+      "tag": "0002_little_fixer",
+      "breakpoints": true
     }
   ]
 }
